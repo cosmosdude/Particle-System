@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Canvas | TDD</title>
+		
+		<style>
+			html, body {
+				margin: 0px;
+				padding: 0px;
+			}
+		</style>
+		
+		<script src="../js/canvas-handler.js"></script>
+	</head>
+	<body>
+		<canvas width="100%" height="100%" id="playground">
+			
+		</canvas>
+		
+		<script>
+			// canvas ref
+			var canvasRef = window.playground;
+			
+			
+			
+			var ctx = canvasRef.getContext('2d');
+			
+			ctx.beginPath();
+			
+			
+//			console.log("x :", 120 + (10 * Math.cos(0)), ", y :", 20 + (10 * Math.sin(0)));
+			
+			PCanvasRetain(canvasRef);
+			
+			PCanvasSetWidth(window.innerWidth);
+			PCanvasSetHeight(window.innerHeight);
+			
+			console.log("Width :",canvasRef.width, ", Height :", canvasRef.height);
+			
+			var colors = [
+				"rgb(246, 114, 128)",
+				"rgb(53, 92, 125)",
+				"rgb(153, 184, 152)",
+				"rgb(220, 237, 194)",
+				"rgb(157, 224, 173)",
+				"rgb(89, 79, 79)",
+				"rgb(229, 252, 194)"
+//				"#ffffff"
+			]
+			
+			
+			var x = 0;
+			var y = 0;
+			var length = window.innerHeight;
+			
+			var direction = 3;
+			
+			var fps = 240;
+			
+			
+			setInterval(function() {
+				
+				
+				
+//				PCanvasMoveToPoint( Math.random() * window.innerWidth , Math.random() * window.innerHeight);
+//				PCanvasAddLineToPoint( Math.random() * window.innerWidth , Math.random() * window.innerHeight );
+//				PCanvasMoveToPoint( 0, 0);
+//				PCanvasAddLineToPoint(1280, 760);
+				
+				var rate = 5;
+				var fpsFactor =  rate ;
+				
+				if (direction == 0) {
+					PCanvasMoveToPoint( x, y );
+					PCanvasAddLineToPoint( x, y + length);
+				
+					x += fpsFactor;	
+					
+					if (x >= window.innerWidth) {
+						x = 0;
+						
+						PCanvasBeginPath();
+						PCanvasClear();
+						
+						direction = 1;
+						length = window.innerWidth;
+					}	
+				} else if (direction == 1) {
+					PCanvasMoveToPoint( y, x );
+					PCanvasAddLineToPoint( y  + length, x);
+				
+					x += fpsFactor;	
+					
+					if (x >= window.innerHeight) {
+						x = 0;
+						
+						PCanvasBeginPath();
+						PCanvasClear();
+						
+						direction = 2;
+						length = window.innerWidth;
+					}	
+				} else {
+					
+					PCanvasMoveToPoint(x, y);
+					PCanvasAddLineToPoint(x, y + window.innerHeight);
+					
+					PCanvasSetStroke( colors[parseInt((Math.random() * colors.length))] );
+					PCanvasStroke();
+					PCanvasBeginPath();
+					
+					PCanvasMoveToPoint( y, x );
+					PCanvasAddLineToPoint( y  + window.innerWidth, x);
+					
+					PCanvasSetStroke( colors[parseInt((Math.random() * colors.length))] );
+					PCanvasStroke();
+					PCanvasBeginPath();
+					
+					x += fpsFactor;
+					
+					if (x >= window.innerWidth) {
+						x = 0;
+						
+						PCanvasBeginPath();
+						PCanvasClear();
+						
+						direction = 3;
+						length = window.innerHeight;
+					}
+				}
+				
+				
+				
+
+				
+				
+				PCanvasSetLineWidth( 2 );
+				PCanvasSetLineCapStyle(kPCanvasLineCapRound);
+
+				
+
+				
+				
+			}, (1 * 1000) / fps);
+			
+			
+
+		</script>
+		
+	</body>
+</html>

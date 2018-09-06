@@ -1,0 +1,40 @@
+@font-face {
+	font-family: SFPro;
+	src: url(minimix-fonts/SFPro/SFPro-Regular.otf);
+}
+
+@font-face {
+	font-family: SFPro-Italic;
+	src: url(minimix-fonts/SFPro/SFPro-Italic.otf);
+}
+
+@font-face {
+	font-family: SFPro-Bold;
+	src: url(minimix-fonts/SFPro/SFPro-Bold.otf);
+}
+
+@font-face {
+	font-family: SFPro-BoldItalic;
+	src: url(minimix-fonts/SFPro/SFPro-BoldItalic.otf);
+}
+
+@font-face {
+	font-family: SFPro-Heavy;
+	src: url(minimix-fonts/SFPro/SFPro-Heavy.otf);
+}
+
+
+
+@font-face {
+	font-family: SFPro-HeavyItalic;
+	src: url(minimix-fonts/SFPro/SFPro-HeavyItalic.otf);
+}
+
+@font-face {
+	font-family: SFPro-Black;
+	src: url(minimix-fonts/SFPro/SFPro-Black.otf);
+}
+@font-face {
+	font-family: SFPro-BlackItalic;
+	src: url(minimix-fonts/SFPro/SFPro-BlackItalic.otf);
+}

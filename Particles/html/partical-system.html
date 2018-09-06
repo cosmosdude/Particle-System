@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title> Partical System | tha </title>
+
+		<style>
+			html, body {
+				margin: 0px;
+				padding: 0px;
+			}
+			
+			canvas#playground {
+				background-color: rgb(89, 79, 79);
+			}
+		</style>
+		
+		<link rel="stylesheet" href="../css/Settings.css"/>
+		
+		<script src="../js/util.js"></script>
+		<script src="../js/canvas-handler.js"></script>
+		<script src="../js/partical-handler.js"></script>
+		<script src="../js/partical.js"></script>
+		<script src="../js/engine.js"></script>
+	</head>
+	<body >
+		<a class="partical-setting-btn-white-theme" onclick="presentMainSettingOverlay();">setting</a>
+		
+		<span class="setting-fps-label" id="fpslabel"> fps: 0 , partical count: 300</span>
+		
+		<script>
+			function Color(_name, _full, _prefix) {
+				var color = {
+					name: _name,
+					full: _full,
+					prefix: _prefix,
+				}
+				
+				return color;
+			}
+
+			var colors = {
+				fgcolors: [],
+				bgcolors: []
+			}
+			isFgcolorButtonsSet = false;
+			
+			colors.fgcolors = [
+				Color('Turquoise', 'rgba(26, 188, 156,1.0)', 'rgba(26, 188, 156,'),
+				Color('Emerald', 'rgba(26, 188, 156,1.0)', 'rgba(26, 188, 156,'),
+				Color('Peter River', 'rgba(52, 152, 219,1.0)', 'rgba(52, 152, 219,'),
+				Color('Amethyst', 'rgba(155, 89, 182,1.0)', 'rgba(155, 89, 182,'),
+				Color('Wet Asphalt', 'rgba(52, 73, 94,1.0)', 'rgba(52, 73, 94,'),
+				
+				Color('Sunflower', 'rgba(241, 196, 15,1.0)', 'rgba(241, 196, 15,'),
+				Color('Carrot', 'rgba(230, 126, 34,1.0)', 'rgba(230, 126, 34,'),
+				Color('Alizarin', 'rgba(231, 76, 60,1.0)', 'rgba(231, 76, 60,'),
+				Color('Clouds', 'rgba(236, 240, 241,1.0)', 'rgba(236, 240, 241,'),
+				Color('Concrete', 'rgba(149, 165, 166,1.0)', 'rgba(149, 165, 166,'),
+			];
+			
+			isBgcolorButtonsSet = false;
+			
+			colors.bgcolors = [
+				Color('Green Sea', 'rgba(22, 160, 133,1.0)', 'rgba(22, 160, 133,'),
+				Color('Nephritis', 'rgba(39, 174, 96,1.0)', 'rgba(39, 174, 96,'),
+				Color('Belize Hole', 'rgba(41, 128, 185,1.0)', 'rgba(41, 128, 185,'),
+				Color('Wisteria', 'rgba(142, 68, 173,1.0)', 'rgba(142, 68, 173,'),
+				Color('Midnight Blue', 'rgba(44, 62, 80,1.0)','rgba(44, 62, 80,'),
+				
+				Color('Orange', 'rgba(243, 156, 18,1.0)', 'rgba(243, 156, 18,'),
+				Color('Pumpkin', 'rgba(211, 84, 0,1.0)', 'rgba(211, 84, 0,'),
+				Color('Pomegrenate', 'rgba(192, 57, 43,1.0)', 'rgba(192, 57, 43,'),
+				Color('Silver', 'rgba(189, 195, 199,1.0)', 'rgba(189, 195, 199,'),
+				Color('Abestos', 'rgba(127, 140, 141,1.0)', 'rgba(127, 140, 141,'),
+			];
+		</script>
+		
+<!--		
+	GUI and GUI controls
+-->
+		
+		<div class="setting-overlay" id="foregroundColorPane" style='z-index=3;'>
+			<div class="setting-hoverview" style='z-index=3;'>
+				<button class="close-button" onclick='dismissForegroundColorPane();'>x</button>
+				
+				<span class="title">Partical Colors</span>
+				<span class="view" id="fgcolorView">
+					
+				</span>
+			</div>
+			
+			
+		</div>
+		
+		<div class="setting-overlay" id="backgroundColorPane" style='z-index=4;'>
+			<div class="setting-hoverview" style='z-index=4;'>
+				<button class="close-button" onclick='dismissBackgroundColorPane();'>x</button>
+				
+				<span class="title">Background Colors</span>
+				<span class="view" id="bgcolorView">
+				
+				</span>
+			</div>
+			
+			
+			
+		</div>
+		
+		<div class="setting-overlay" id="mainSettingOverlay" style='z-index=5;'>
+			
+			<div class="setting-hoverview" style='z-index=5;'>
+				<button class="close-button" onclick='dismissMainSettingOverlay();'>x</button>
+				<span class="title">Change Color</span>
+				<span class='view'>
+					<span class="button" onclick="presentForegroundColorPane();">Partical Color</span><br>
+					<span class="button" onclick="presentBackgroundColorPane();">Background Color</span>
+				</span>
+				
+				
+				<span class="title">Physics Effect</span>
+				<span class="view">
+					<span class="label"> Bloater </span>
+					
+					<br>
+					
+					<span class="label"> Physics Effect Radius </span>
+					<input type="range" min="1" max="300" value='100' id="physicsRadiusSlider" onchange="handlePhysicsRadiusChange();">
+					<span class="label" id="physicsRadiusLabel"> 100 </span> 
+					
+					<span class="button-active" id='shouldMoveParticalButton' onclick="handleShouldMoveParticalButton();">Should Move Particals</span>
+				</span>
+				
+				<span class="title">Partical Control</span>
+				<span class="view">
+					<span class="label"> Partical Count </span>
+					<input type="range" min="1" max="1000" value='300' id="particalCountSlider" onchange="handleParticalChange();">
+					<span class="label" id="particalCountLabel"> 300 </span> 
+					
+					<br>
+					
+					<span class="label"> Partical Travel Time </span>
+					<input type="range" min="1" max="100" value='10' id="particalTravelTimeSlider" onchange="handleParticalTravelTimeChange();">
+					<span class="label" id="particalTravelTimeLabel"> 5 </span> 
+					
+					<br>
+					
+					<span class="label"> Frame Per Second </span>
+					<input type="range" min="30" max="120" value='60' id="fpsSlider" onchange="handleFpsChange();">
+					<span class="label" id="fpsLabel"> 60 </span> 
+					
+					<br>
+				</span>
+			</div>
+		</div>
+		
+		
+		
+		
+		
+		
+		<canvas width="100%" height="100%" id="playground"></canvas>
+		
+		<script>
+			// Predefined physics effect constants
+			var kPhysicsEffectBloater = 0; 			// implemented [YES]
+			var kPhysicsEffectElectroRepel = 1; 	// implemented [NO]
+			
+			
+			
+			// radius to use in user mouse location
+			var userPointerRadius = 100;
+//			var particalTravelTime = 5;
+			var shouldMoveParticals = true;
+			var shouldRevrese = false;
+			var desiredParticalCount = 300;
+			
+			var color = {
+				fgcolor : colors.fgcolors[5],
+				bgcolor : colors.bgcolors[9]
+			}
+			
+			window.playground.style['background-color'] = color.bgcolor.full;
+			
+//			var fgcolor = fgcolors[3];
+//			var bgcolor = bgcolors[9];
+			
+			var PPhysicsOption = {
+				effect: kPhysicsEffectBloater
+			};
+			
+			PCanvasRetain(window.playground);
+			PCanvasSetWidth(window.innerWidth);
+			PCanvasSetHeight(window.innerHeight);
+			
+			PCanvasSetLineWidth(0.5);
+			
+			
+			PEngine.initializeParticalPool( desiredParticalCount );
+			
+			PEngine.fixedCallback = function( params ) {
+				
+				var currentSequence = params.currentSequence;
+				var currentPool = params.currentPool;
+
+				
+//				console.log();
+				
+				for (var i = 0; i < currentPool.capacity; i += 1) {
+					
+					var current = currentPool.particals[i];
+					
+					current.scale = 1;
+					
+					// if current partical instance is instead number zero
+					// continue the loop
+					if (current == 0) {
+						continue;
+					}
+
+					// if the sequence is initial
+					if (currentSequence == 0) {
+
+						// and partical index is the very first one,
+						// clear the canvas
+						if (i == 0) {
+							PCanvasClear();	
+							PCanvasBeginPath();
+						}
+
+//						console.log(current.frame);
+
+						
+						// get the center points of current partical
+						var pCenterX = (current.frame.width / 2) + current.frame.x;
+						var pCenterY = (current.frame.height / 2) + current.frame.y;
+						
+						
+						
+						// TODO: apply additional physics effects
+						// Currently used effect is 'kPhysicEffectBloater'
+						
+						
+						
+						
+						// Pythagoras Triangle Sides
+						var horizontalSide = pCenterX - PCanvasGetCurrentMouseLocation().x;
+						var verticalSide = pCenterY - PCanvasGetCurrentMouseLocation().y; 
+						
+						// Pythagoras Triangle Sides in Square
+						var horizontalSideSquare = Math.pow(horizontalSide, 2);
+						var verticalSideSquare = Math.pow(verticalSide, 2);
+						var hypotenueSquare = Math.pow(userPointerRadius, 2);
+						
+						
+						// represents how close the partical is to the center of the mouse location ( in reverse percent)
+						var closeRangeInPercent = 1;
+						
+						// Maximum scale available for the physical effect
+						var maxTargetScale = 40;
+						
+						
+						var additionSquareResult = horizontalSideSquare + verticalSideSquare;
+						if (hypotenueSquare >= additionSquareResult) {
+//							current.scale = 3;
+							
+							closeRangeInPercent = additionSquareResult / hypotenueSquare;
+							
+							
+							// apply transform effects according to physics option
+							if (PPhysicsOption.effect == kPhysicsEffectBloater) {
+								current.scale = maxTargetScale * (1 - closeRangeInPercent);	
+							}
+							
+												 
+//							console.log(closeRangeInPercent);
+						}
+						
+						
+						
+						var pradius = (current.scale * current.frame.width / 2) + 1;
+						
+//						PCanvasSetStroke('rgba(255, 255, 255, 0.5)');
+//						PCanvasSetFill('rgba(255, 255, 255, 0.5)');
+						
+						var precisedPercent = parseInt(closeRangeInPercent * 100) / 100;
+						
+						if (precisedPercent < 0.4) {
+							precisedPercent += 0.4;
+						}
+						
+						var colorPrefix = color.fgcolor.prefix;//'rgba(246, 114, 128,';
+						
+						PCanvasSetStroke(colorPrefix + precisedPercent + ')');
+						PCanvasSetFill(colorPrefix + precisedPercent + ')');
+						
+						
+						
+						PCanvasBeginPath();
+						
+						// apply shapes according to physics effect
+						if (PPhysicsOption.effect == kPhysicsEffectBloater) {
+							PCanvasAddIsolatedCircleToPoint( current.frame.x + pradius, current.frame.y + pradius, pradius );
+						}
+						
+						PCanvasClosePath();
+						PCanvasStroke();
+						PCanvasFill();
+
+					}
+					
+					if (currentSequence == 2) {
+						if ( shouldMoveParticals ) {
+							current.frame.x += current.velocity.x;
+							current.frame.y += current.velocity.y;	
+						}
+						
+						
+						if (current.frame.x < 0 || current.frame.x > PCanvasGetWidth()) {
+							PEngine.particalPool.remove(current);
+							PEngine.tryToAssignNewPartical();
+						}
+						
+						if (current.frame.y < 0 || current.frame.y > PCanvasGetHeight()) {
+							PEngine.particalPool.remove(current);
+							PEngine.tryToAssignNewPartical();
+						}
+					}
+					
+				}
+			}
+			
+			// start the engine
+			PEngine.bindFPS();
+			PEngine.unbindFPS();
+			PEngine.fps = 60;
+			PEngine.bindFPS();
+			
+//			userPointerRadius = 100;
+			
+			// fps tracker
+			setInterval(function() {
+//				console.log('[fps: ' + PEngine.drawnFrame + ']');
+				window.fpslabel.innerHTML = "fps: " + PEngine.drawnFrame + " , partical count: " + desiredParticalCount;
+				PEngine.resetDrawnFrameDebug();
+			}, 1 * 1000);
+		</script>
+		
+		
+		
+		
+		
+		<script>
+			
+			var Buffer = {
+				particalCount: desiredParticalCount,
+				particalTravelTime: 5,
+				fps: 60,
+				physicsEffectRadius : userPointerRadius
+			}
+			
+			var _mainSettingOverlay = document.getElementById('mainSettingOverlay');
+			var _backgroundColorPane = document.getElementById('backgroundColorPane');
+			var _foregroundColorPane = document.getElementById('foregroundColorPane');
+			
+			function presentMainSettingOverlay() {
+
+				
+//				document.body.appendChild(_mainSettingOverlay);
+				_mainSettingOverlay.style['display'] = 'block';
+			}
+			function dismissMainSettingOverlay() {
+
+				
+//				document.body.removeChild(_mainSettingOverlay);
+				_mainSettingOverlay.style['display'] = 'none';
+				
+				
+				desiredParticalCount = Buffer.particalCount;
+				userPointerRadius = Buffer.physicsEffectRadius;
+				
+				PEngine.unbindFPS();
+				PEngine.fps = Buffer.fps;
+				window.playground.style['background-color'] = color.bgcolor.full;
+				
+				PEngine.particalTravelTimeInSecond = Buffer.particalTravelTime;
+				PEngine.initializeParticalPool(Buffer.particalCount);
+				PEngine.bindFPS();
+			}
+			
+			
+			
+			
+			function activateCurrentBgButton() {
+				var children = bgcolorView.children;
+				
+				for (var i = 0 , len = children.length; i < len; i += 1) {
+					var each = children[i];
+					
+					if (each.className.includes('button')) {
+						each.className = 'button';
+						
+						console.log("Bgcolor : " + color.bgcolor.name);
+						
+						var index = parseInt(each['data-index']);
+						
+						if (colors.bgcolors[index].name == color.bgcolor.name) {
+							each.className = 'button-active';
+						}
+					}
+				}
+			}
+			function presentBackgroundColorPane( ) {
+				
+				if (!isBgcolorButtonsSet) {
+					isBgcolorButtonsSet = true;
+					
+//					bgcolorView
+					
+					for (var i = 0, len = colors.bgcolors.length; i < len; i += 1) {
+						
+						var button = document.createElement('span');
+						
+						button.className = 'button';
+						
+//						button['data-index'] = i;
+						
+						Object.defineProperty(button, 'data-index', {
+							value: i,
+							configurable: false
+						});
+						console.log(i + " " + button['data-index']);
+						
+						
+						if (colors.bgcolors[i].name === color.bgcolor.name) {
+							button.className = 'button-active';
+						}
+						
+						button.onclick = function(index) {
+							
+//							console.log(parseInt(this['data-index']) + " " + parseInt(button['data-index'] ));
+//							console.log(colors.bgcolors[ parseInt(this['data-index'] ) ].name);
+							
+							color.bgcolor = colors.bgcolors[ parseInt(this['data-index'] ) ];
+							
+							activateCurrentBgButton();
+						};
+						
+						
+						
+						button.innerHTML = colors.bgcolors[i].name;
+						
+						bgcolorView.appendChild(button);
+					}
+					
+				}
+				
+				_backgroundColorPane.style['display'] = 'block';
+				dismissMainSettingOverlay();
+				
+				
+			}
+			
+			function dismissBackgroundColorPane() {
+				
+				
+				_backgroundColorPane.style['display'] = 'none';
+				presentMainSettingOverlay();
+			}
+			
+			
+			
+			
+			
+			
+			function activateCurrentFgButton() {
+				var children = fgcolorView.children;
+				
+				for (var i = 0 , len = children.length; i < len; i += 1) {
+					var each = children[i];
+					
+					if (each.className.includes('button')) {
+						each.className = 'button';
+						
+						console.log("Bgcolor : " + color.fgcolor.name);
+						
+						var index = parseInt(each['data-index']);
+						
+						if (colors.fgcolors[index].name == color.fgcolor.name) {
+							each.className = 'button-active';
+						}
+					}
+				}
+			}
+			function presentForegroundColorPane(){
+				
+				if (!isFgcolorButtonsSet) {
+					isFgcolorButtonsSet = true;
+					
+					for (var i = 0, len = colors.fgcolors.length; i < len; i += 1) {
+						
+						var button = document.createElement('span');
+						
+						button.className = 'button';
+						
+//						button['data-index'] = i;
+						
+						Object.defineProperty(button, 'data-index', {
+							value: i,
+							configurable: false
+						});
+						console.log(i + " " + button['data-index']);
+						
+						if (colors.fgcolors[i].name === color.fgcolor.name) {
+							button.className = 'button-active';
+						}
+						
+						button.onclick = function(index) {
+							
+//							console.log(parseInt(this['data-index']) + " " + parseInt(button['data-index'] ));
+//							console.log(colors.fgcolors[ parseInt(this['data-index'] ) ].name);
+							
+							color.fgcolor = colors.fgcolors[ parseInt(this['data-index'] ) ];
+							
+							activateCurrentFgButton();
+						};
+						
+						
+						
+						button.innerHTML = colors.fgcolors[i].name;
+						
+						fgcolorView.appendChild(button);
+					}
+				}
+				
+				_foregroundColorPane.style['display'] = 'block';
+				
+				dismissMainSettingOverlay();
+			}
+			function dismissForegroundColorPane(){
+
+				
+				_foregroundColorPane.style['display'] = 'none';
+				
+				presentMainSettingOverlay();
+			}
+			
+			
+			function handlePhysicsRadiusChange() {
+				Buffer.physicsEffectRadius = parseInt(physicsRadiusSlider.value);
+				physicsRadiusLabel.innerHTML = Buffer.physicsEffectRadius;
+			}
+			
+			function handleShouldMoveParticalButton() {
+				if(shouldMoveParticalButton.className == 'button') {
+					shouldMoveParticalButton.className = 'button-active'
+					shouldMoveParticals = true;
+				} else {
+					shouldMoveParticalButton.className = 'button';
+					shouldMoveParticals = false;
+				}
+			}
+			
+			
+			function handleParticalChange() {
+				Buffer.particalCount = parseInt(particalCountSlider.value);
+				particalCountLabel.innerHTML = Buffer.particalCount;
+			}
+			
+			function handleParticalTravelTimeChange() {
+				Buffer.particalTravelTime = parseInt(particalTravelTimeSlider.value);
+				particalTravelTimeLabel.innerHTML = Buffer.particalTravelTime;
+			}
+			
+			function handleFpsChange() {
+				Buffer.fps = parseInt(fpsSlider.value);
+				fpsLabel.innerHTML = Buffer.fps;
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,19 @@
+@font-face {
+	font-family: CaviarDreams-Black;
+	src: url(minimix-fonts/CaviarDreams/CaviarDreams.ttf);
+}
+
+@font-face {
+	font-family: CaviarDreams-Bold;
+	src: url(minimix-fonts/CaviarDreams/CaviarDreams-Bold.ttf);
+}
+
+@font-face {
+	font-family: CaviarDreams-BoldItalic;
+	src: url(minimix-fonts/CaviarDreams/CaviarDreams-BoldItalic.ttf);
+}
+
+@font-face {
+	font-family: CaviarDreams-Itlaic;
+	src: url(minimix-fonts/CaviarDreams/CaviarDreams-Itlaic.ttf);
+}

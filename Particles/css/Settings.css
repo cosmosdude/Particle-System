@@ -1,0 +1,292 @@
+@import url(minimix-font.css);
+
+a {
+	cursor: pointer;
+	text-decoration: none;
+	color: black;
+}
+
+a:visited{
+	text-decoration: none;
+	color : black;
+}
+
+
+
+
+.partical-setting-btn-black-theme {
+	position: fixed;
+	display: block;
+	
+	left: 5px;
+	top: 5px;
+	
+/*
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+*/
+	
+	font-size: 15px;
+	font-family: SFPro-Black;
+	
+	padding: 10px 15px 10px 15px;
+	
+/*	border-radius: 5px;*/
+	
+	border-width: 3px;
+	border-style: solid;
+	border-color: black;
+	color: black;
+	background-color: transparent;
+	
+	transition: 0.5s all;
+}
+
+.partical-setting-btn-black-theme:hover {
+	color: black;
+	background-color: black;
+}
+
+
+
+.partical-setting-btn-white-theme {
+	
+	position: fixed;
+	display: block;
+	
+	left: 5px;
+	top: 5px;
+	
+/*
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+*/
+	
+	font-size: 15px;
+	font-family: SFPro-Black;
+	
+	padding: 10px 15px 10px 15px;
+	
+/*	border-radius: 5px;*/
+	
+	border-width: 3px;
+	border-style: solid;
+	border-color: white;
+	
+	color: white;
+	background-color: transparent;
+	
+	transition: 0.5s all;
+}
+
+.partical-setting-btn-white-theme:hover {
+	color: black;
+	background-color: white;
+}
+
+
+.setting-overlay {
+	background-color: rgba(0, 0, 0, 0.4);
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	display: none;
+}
+
+.setting-hoverview {
+	position: relative;
+	
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	
+	width:500px;
+	height: 300px;
+	
+	border-radius: 10px;
+	
+	background-color: white;
+	
+/*	padding: 25px;*/
+	
+
+	overflow-y: scroll;
+}
+
+.setting-hoverview .close-button {
+	
+/*	width: 25px;*/
+/*	height: 25px;*/
+	
+	margin: 5px;
+	margin: 5px;
+	
+	display: block;
+	
+	cursor: pointer;
+	padding: 10px 10px 10px 10px;
+	
+	background-color : white;
+	color : #ff0000;
+	
+	border: 0px solid white;
+	border-radius: 50%;
+	
+	font-family: ArialRoundedMT-Bold;
+	font-size: 12px;
+	
+/*	transition: 0.25s all linear;*/
+}
+/*
+.setting-hoverview .close-button:hover {
+	
+	background-color : #ff0000;
+	color : white;
+}
+*/
+
+
+
+
+
+
+.setting-hoverview .title {
+/*	width: 100%;*/
+	
+	cursor: default;
+	
+	margin: 15px;
+	margin-bottom: 5px;
+	
+	display: block;
+	
+	font-family: SFPro-Black;
+	font-size: 25px;
+	
+	color: black;
+}
+
+.setting-hoverview .view {
+	
+	display: block;
+	
+	margin-left: 15px;
+	margin-right: 15px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	
+	padding: 15px;
+	
+	background-color: #f2f2f2;
+	
+	border-radius: 5px;
+}
+
+
+
+
+
+
+.setting-hoverview .view .button {
+	
+	margin: 5px;
+	
+	display: inline-block;
+	
+	cursor: pointer;
+	padding: 10px 15px 10px 15px;
+	
+	background-color : white;
+	color : #6060ff;
+	
+	border: 0px solid white;
+	border-radius: 5px;
+	
+	font-family: ArialRoundedMT-Bold;
+	font-size: 12px;
+	
+	transition: 0.25s all linear;
+}
+
+.setting-hoverview .view .button-active {
+	
+	margin: 5px;
+	
+	display: inline-block;
+	
+	cursor: pointer;
+	padding: 10px 15px 10px 15px;
+	
+	background-color : #6060ff;
+	color : white;
+	
+	border: 0px solid white;
+	border-radius: 5px;
+	
+	font-family: ArialRoundedMT-Bold;
+	font-size: 12px;
+	
+	transition: 0.25s all linear;
+}
+
+.setting-hoverview .view .button:hover {
+	
+	background-color : #6060ff;
+	color : white;
+}
+
+.setting-hoverview .view .label {
+	
+	margin-top: 5px;
+	margin-bottom: 5px;
+	
+	display: inline-block;
+	
+	cursor: default;
+	padding: 10px 15px 10px 15px;
+	
+/*	background-color : white;*/
+	color : black;
+	
+	border: 0px solid white;
+	border-radius: 5px;
+	
+	font-family: SFPro;
+	font-size: 12px;
+}
+
+.setting-hoverview .view input[type="range"] {
+	margin:5px;
+	display: inline;
+}
+
+.setting-hoverview .view input[type="checkbox"] {
+	margin: 5px;
+	display: inline;
+}
+
+
+.setting-hoverview .view .selection {
+	margin: 5px;
+	display: inline;
+}
+
+
+
+.setting-fps-label {
+	position: fixed;
+	bottom: 5px;
+	left: 5px;
+	
+	padding: 10px 5px 10px 5px;
+	
+	background-color: white;
+	color : black;
+	
+	font-family: SFPro;
+	font-size: 12px;
+	
+	border-radius : 5px;
+}
